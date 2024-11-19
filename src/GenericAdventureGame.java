@@ -3,15 +3,31 @@ public class GenericAdventureGame {
     private String playerName;
     private int playerHealth;
     private Scanner scan;
+    private int rounds;
+    private int roundCount;
 
     public GenericAdventureGame(String n){
         playerName = n;
         playerHealth = 100;
         scan = new Scanner(System.in);
+        rounds = -1;
+        roundCount=1;
+    }
+
+    public GenericAdventureGame(String n, int r){
+        playerName = n;
+        playerHealth = 100;
+        scan = new Scanner(System.in);
+        rounds = r;
+        roundCount=1;
+    }
+
+    public int getRounds() {
+        return rounds;
     }
 
     public void event(){
-        int num = (int)(Math.random()*5)+1;
+        int num = (int)(Math.random()*3)+1; //change the 3 to 5 once done
         if (num==1){
             triviaEvent();
         } else if (num==2){
@@ -20,6 +36,7 @@ public class GenericAdventureGame {
             mathEvent();
         }
         System.out.println("You have "+playerHealth+" HP left");
+        roundCount++;
     }
 
     private void triviaEvent(){
@@ -58,7 +75,7 @@ public class GenericAdventureGame {
             System.out.println("A) Arachnophobia");
             System.out.println("B) Mysophobia");
             System.out.println("C) Amaxophobia");
-            System.out.println("D) Hippopotomonstrosesquippedaliophobia ");
+            System.out.println("D) Hippopotomonstrosesquippedaliophobia");
             answer = scan.nextLine().toLowerCase();
             if (answer.equals("d")){
                 System.out.println("You walk down the path.");
@@ -131,8 +148,22 @@ public class GenericAdventureGame {
         return (int)(Math.random()*21)+10;
     }
 
-    public boolean alive(){
+    public boolean gameOver(){
+        boolean notDead;
+        boolean moreRounds = true;
         if (playerHealth>0){
+            notDead=true;
+        } else {
+            notDead = false;
+        }
+
+        if (rounds>0){
+            if (roundCount>rounds){
+                moreRounds = false;
+            }
+        }
+
+        if (notDead&&moreRounds){
             return true;
         }
         return false;

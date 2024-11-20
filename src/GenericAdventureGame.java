@@ -5,6 +5,8 @@ public class GenericAdventureGame {
     private Scanner scan;
     private int rounds;
     private int roundCount;
+    private boolean hasSpellbook;
+    private boolean secret;
 
     public GenericAdventureGame(String n){
         playerName = n;
@@ -12,6 +14,8 @@ public class GenericAdventureGame {
         scan = new Scanner(System.in);
         rounds = -1;
         roundCount=1;
+        hasSpellbook = false;
+        secret = false;
     }
 
     public GenericAdventureGame(String n, int r){
@@ -20,6 +24,8 @@ public class GenericAdventureGame {
         scan = new Scanner(System.in);
         rounds = r;
         roundCount=1;
+        hasSpellbook = false;
+        secret = false;
     }
 
     public int getRounds() {
@@ -111,10 +117,125 @@ public class GenericAdventureGame {
             }
         }
     }
-
+    //use a nested loop here
     private void battleEvent(){}
 
-    private void choiceEvent(){}
+    private void choiceEvent(){
+        int num = (int)(Math.random()*4)+1;
+        String ans = "";
+        if (num==1){
+            System.out.println("A merchant offers you a free cookie. Will you take it?");
+            System.out.println("A) Yes");
+            System.out.println("B) No");
+            ans = scan.nextLine().toLowerCase();
+            while (!ans.equals("a")&&!ans.equals("b")) {
+                System.out.println("I don't think the merchant understands you. Remember to respond with the corresponding letter");
+                ans = scan.nextLine().toLowerCase();
+            }
+            if (ans.equals("a")){
+                System.out.println("You take the cookie. You realize it's an oatmeal raisin cookie. You're allergic to raisins, so you take some damage.");
+                playerHealth-=damage();
+            } else {
+                System.out.println("You decline and move along.");
+            }
+        } else if (num==2&&hasSpellbook==false){
+            System.out.println("A man walks up to you.");
+            System.out.println("\"SHERN SIDR RMWSLSIGJ! E LSMN RJWJ EPEJEX WP MSHFU TIEO LWJE JFH K SDK'R KDNF MG. JSK VBBJ MCBG K NSKFK KSDHNF. KSH POW SJFJ SHF SDKRL DN GJHF J DKE SJEKG JIEKSITU SNFGK?\"");
+            System.out.println("He hands you a spellbook. I think he wants you to say one of the words in there so that people can understand him again. Not sure which one it is tho. Try your best I guess");
+            System.out.println("A) チキン"); //chicken
+            System.out.println("B) 呪いを解く"); //remove curse
+            System.out.println("C) 爆発"); //explosion
+            System.out.println("D) リックロール");//rickroll lmao
+            ans = scan.nextLine().toLowerCase();
+            while (!ans.equals("a")&&!ans.equals("b")&&!ans.equals("c")&&!ans.equals("d")){
+                System.out.println("Yeah that's not one of the spells. Remember to respond with the corresponding letter.");
+                ans = scan.nextLine().toLowerCase();
+            }
+            if (ans.equals("a")){
+                System.out.println("You recite the words. The man then turns into a chicken. You shrug and walk away");
+                hasSpellbook=true;
+                System.out.println("OBTAINED SPELLBOOK");
+            } else if (ans.equals("b")){
+                System.out.println("You recite the words. The man looks at you with gratitude. \"Thank you so much, dear traveler! Here. Keep the spellbook as thanks\"");
+                hasSpellbook=true;
+                System.out.println("OBTAINED SPELLBOOK");
+            } else if (ans.equals("c")){
+                System.out.println("The spellbook explodes. You were holding it, so your hands get burns.");
+                playerHealth-=damage();
+            } else {
+                System.out.println("NEVER GONNA GIVE YOU UP");
+                System.out.println("NEVER GONNA LET YOU DOWN");
+                System.out.println("NEVER GONNA RUN AROUND AND HURT YOU");
+                System.out.println("NEVER GONNA MAKE U CRY");
+                System.out.println("NEVER GONNA SAY GOODBYE");
+                System.out.println("NEVER GONNA TELL A LIE AND HURT YOU");
+                playerHealth-=damage();
+            }
+        } else if (num==2){
+            System.out.println("\"Hello! "+playerName+" ,right? I've heard about you. Heard you've been looking for something.\"");
+            if (hasSpellbook){ //helps with secret ending
+                System.out.println("She notices the spellbook in your bag.");
+                System.out.println("\"Oh you have the spellbook! That's nice.\"");
+                System.out.println("\"...say, do you know what it is you're looking for?\"");
+                System.out.println("A) ...");
+                ans = scan.nextLine();
+                System.out.println("\"You don't know, huh?\"");
+                System.out.println("\"Let me tell you something.\"");
+                System.out.println("\"You know how to end this adventure, right?\"");
+                System.out.println("\"You either die or you run out of rounds.\"");
+                System.out.println("\"But what if I told you that there's a third way?\"");
+                System.out.println("\"A secret way.\"");
+                System.out.println("\"It's in that spellbook of yours.\"");
+                System.out.println("\"You should be able to see it now...\"");
+                System.out.println("\"You just need to get lucky enough to trigger it I guess.\"");
+                System.out.println("A) ...");
+                ans = scan.nextLine();
+                secret = true;
+            }
+            System.out.println("\"Anyway, my bag's stuck up in that tree. Can you get it for me?\"");
+            System.out.println("You agree to do so and attempt to get it.");
+            System.out.println("A) Climb the tree");
+            System.out.println("B) Chop down the tree");
+            ans = scan.nextLine().toLowerCase();
+            while (!ans.equals("a")&&!ans.equals("b")){
+                System.out.println("Yeah you can't do that buddy. Remember to respond with the corresponding letter");
+                ans = scan.nextLine().toLowerCase();
+            }
+
+            if (ans.equals("a")){
+                System.out.println("You climb the tree successfully and get the bag. You jump down from the tree and give it to the woman.");
+                System.out.println("\"Thank you, dear traveler!\"");
+            } else {
+                System.out.println("You spot an axe nearby. You grab it and chop the tree down. Unfortunately, you have no idea what you're doing so the tree falls down on you. You eventually get out, but you did take some damage from that.");
+                playerHealth-=damage();
+            }
+        } else if (num==3){
+            System.out.println("You're walking down the path when you hear singing. You check it out and see a choir singing. They seem really into it.");
+            System.out.println("A) Ignore them");
+            System.out.println("B) Disturb them");
+            System.out.println("C) Secret 3rd option");
+            ans = scan.nextLine().toLowerCase();
+            while (!ans.equals("a")&&!ans.equals("b")&&!ans.equals("c")){
+                System.out.println("You can't do that! Remember to respond with the corresponding letter");
+                ans = scan.nextLine().toLowerCase();
+            }
+            if (ans.equals("a")){
+                System.out.println("You continue to walk down the path");
+            } else if (ans.equals("b")){
+                System.out.println("You take out a bell and ring it. The choir stops singing and notices you. They then throw a bunch of rocks at you. What were you thinking, man?");
+                playerHealth-=damage();
+            } else {
+                System.out.println("You listen to the choir for a while. Their singing is very beautiful. It's so beautiful that it heals you.");
+                if (100-playerHealth<=9){
+                    playerHealth=100;
+                } else {
+                    playerHealth+=10;
+                }
+            }
+        } else {
+            System.out.println(""); //PLEASE FINISH THIS ONE
+        }
+    }
 
     private void luckEvent(){
         int luckyNum = (int)(Math.random()*10)+1;

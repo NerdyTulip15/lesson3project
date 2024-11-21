@@ -7,6 +7,8 @@ public class GenericAdventureGame {
     private int roundCount;
     private boolean hasSpellbook;
     private boolean secret;
+    private int healingPotions;
+    private boolean understandSpellbook;
 
     public GenericAdventureGame(String n){
         playerName = n;
@@ -16,6 +18,8 @@ public class GenericAdventureGame {
         roundCount=1;
         hasSpellbook = false;
         secret = false;
+        healingPotions = 0;
+        understandSpellbook = false;
     }
 
     public GenericAdventureGame(String n, int r){
@@ -26,6 +30,8 @@ public class GenericAdventureGame {
         roundCount=1;
         hasSpellbook = false;
         secret = false;
+        healingPotions = 0;
+        understandSpellbook = false;
     }
 
     public int getRounds() {
@@ -33,13 +39,15 @@ public class GenericAdventureGame {
     }
 
     public void event(){
-        int num = (int)(Math.random()*3)+1; //change the 3 to 5 once done
+        int num = (int)(Math.random()*5)+1;
         if (num==1){
             triviaEvent();
         } else if (num==2){
             luckEvent();
         } else if (num==3){
             mathEvent();
+        } else if (num==4){
+            choiceEvent();
         }
         System.out.println("You have "+playerHealth+" HP left");
         roundCount++;
@@ -118,7 +126,62 @@ public class GenericAdventureGame {
         }
     }
     //use a nested loop here
-    private void battleEvent(){}
+    private void battleEvent(){
+        int enemyHP = 50;
+        String action;
+        System.out.println("Oh no! It's a wild goblin!");
+        while (enemyHP>0){
+            System.out.println("Choose an action");
+            System.out.println("A) Sword");
+            System.out.print("B) Heal");
+            System.out.println(" (healing potions: "+healingPotions+")");
+            if (hasSpellbook){
+                System.out.println("C) Spellbook");
+            }
+            action = scan.nextLine().toLowerCase();
+            if (hasSpellbook) {
+                while (!action.equals("a") && !action.equals("b") && !action.equals("c")) {
+                    System.out.println("You can't do that! Remember to respond with the corresponding letter");
+                    action = scan.nextLine().toLowerCase();
+                }
+            } else {
+                while (!action.equals("a") && !action.equals("b")) {
+                    System.out.println("You can't do that! Remember to respond with the corresponding letter");
+                    action = scan.nextLine().toLowerCase();
+                }
+            }
+
+            if (action.equals("a")){
+                System.out.println("You pull out your sword and slash the goblin");
+                enemyHP-=10;
+                System.out.println("Goblin HP: "+enemyHP);
+            } else if (action.equals("b")){
+                if (healingPotions==0){
+                    System.out.println("bro you literally have no healing potions");
+                } else {
+                    System.out.println("You drank a healing potion");
+                    healingPotions--;
+                    playerHealth+=8;
+                    if (playerHealth>100){
+                        playerHealth=100;
+                    }
+                }
+            } else if (action.equals("c")){
+                if (understandSpellbook){
+                    spell("WORK ON THIS PLEASE");
+                } else {
+                    System.out.println("You used the spellbook. Or at least tried to");
+                    enemyHP-=3;
+                }
+            }
+
+        }
+
+    }
+
+    private int spell(String s){ //Should return an int that'll be used for the goblin's damage
+        return 0;
+    }
 
     private void choiceEvent(){
         int num = (int)(Math.random()*4)+1;
@@ -159,6 +222,8 @@ public class GenericAdventureGame {
                 System.out.println("You recite the words. The man looks at you with gratitude. \"Thank you so much, dear traveler! Here. Keep the spellbook as thanks\"");
                 hasSpellbook=true;
                 System.out.println("OBTAINED SPELLBOOK");
+                System.out.println("OBTAINED SPELLBOOK TRANSLATOR");
+                understandSpellbook = true;
             } else if (ans.equals("c")){
                 System.out.println("The spellbook explodes. You were holding it, so your hands get burns.");
                 playerHealth-=damage();
@@ -233,7 +298,23 @@ public class GenericAdventureGame {
                 }
             }
         } else {
-            System.out.println(""); //PLEASE FINISH THIS ONE
+            System.out.println("A wizard approaches you.");
+            System.out.println("\"Hey, you look pretty strong. You see, I made this pretty cool spell and I need to test it on someone. Would you like to test it out?\"");
+            System.out.println("A) Sure");
+            System.out.println("B) No");
+            ans = scan.nextLine().toLowerCase();
+            if (!ans.equals("a")&&!ans.equals("b")){
+                System.out.println("The wizard looks confused. Remember to correspond with the corresponding letter");
+                ans = scan.nextLine().toLowerCase();
+            }
+            if (ans.equals("a")){
+                System.out.println("The wizard tests out his spell on you. Thankfully, you're left unharmed.");
+                System.out.println("\"Thank you, kind traveller. Here, take this as a gift.\"");
+                System.out.println("The wizard gave you a healing potion");
+                healingPotions++;
+            } else if (ans.equals("b")){
+                System.out.println("The wizard walks away disappointed. You continue to walk down the path");
+            }
         }
     }
 

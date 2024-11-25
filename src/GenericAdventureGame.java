@@ -48,6 +48,8 @@ public class GenericAdventureGame {
             mathEvent();
         } else if (num==4){
             choiceEvent();
+        } else if (num==5){
+            battleEvent();
         }
         System.out.println("You have "+playerHealth+" HP left");
         roundCount++;
@@ -131,6 +133,7 @@ public class GenericAdventureGame {
         String action;
         System.out.println("Oh no! It's a wild goblin!");
         while (enemyHP>0){
+            goblinAttack();
             System.out.println("Choose an action");
             System.out.println("A) Sword");
             System.out.print("B) Heal");
@@ -154,7 +157,6 @@ public class GenericAdventureGame {
             if (action.equals("a")){
                 System.out.println("You pull out your sword and slash the goblin");
                 enemyHP-=10;
-                System.out.println("Goblin HP: "+enemyHP);
             } else if (action.equals("b")){
                 if (healingPotions==0){
                     System.out.println("bro you literally have no healing potions");
@@ -168,19 +170,63 @@ public class GenericAdventureGame {
                 }
             } else if (action.equals("c")){
                 if (understandSpellbook){
-                    spell("WORK ON THIS PLEASE");
+                    System.out.println("Enter a spell name. It can be any name you like.");
+                    action = scan.nextLine().toLowerCase();
+                    if (action.equals("wake up")&&secret){
+                        System.out.println("You open your eyes. You seem to be in a hospital laying on a bed.");
+                        System.out.println("There's a nurse right next to you.");
+                        System.out.println("\"Oh! You're awake!\"");
+                        System.out.println("A) ...");
+                        action = scan.nextLine();
+                        System.out.println("\"I was starting to worry that you wouldn't make it...\"");
+                        System.out.println("\"You've been in a coma for 7 years\"");
+                        System.out.println("A) ...");
+                        action = scan.nextLine();
+                        System.out.println("\"Don't worry, it's going to be okay now.\"");
+                        playerHealth = 0;
+                        break;
+                    } else {
+                        int damage = spell(action);
+                        enemyHP -= damage;
+                    }
                 } else {
                     System.out.println("You used the spellbook. Or at least tried to");
                     enemyHP-=3;
                 }
             }
+            System.out.println("Goblin HP: "+enemyHP);
 
         }
 
     }
 
-    private int spell(String s){ //Should return an int that'll be used for the goblin's damage
-        return 0;
+    private void goblinAttack(){
+        int act = (int)(Math.random()*3)+1;
+        if (act==1){
+            System.out.println("The goblin slashed you with its claws!");
+            playerHealth-=5;
+        } else if (act==2){
+            System.out.println("The goblin stabbed you with a very sharp stick!");
+            playerHealth-=10;
+        } else {
+            System.out.println("The goblin punched you!");
+            playerHealth-=3;
+        }
+    }
+
+    private int spell(String s){
+        int len = s.length();
+        int damage = len/2;
+        for (int i=0; i<len; i++){
+            String sub = s.substring(i,i+1);
+            sub = sub.toLowerCase();
+            if (sub.equals("e")){
+                damage+=2;
+            } else if (sub.equals("x")){
+                damage+=5;
+            }
+        }
+        return damage;
     }
 
     private void choiceEvent(){
@@ -250,9 +296,7 @@ public class GenericAdventureGame {
                 System.out.println("\"You either die or you run out of rounds.\"");
                 System.out.println("\"But what if I told you that there's a third way?\"");
                 System.out.println("\"A secret way.\"");
-                System.out.println("\"It's in that spellbook of yours.\"");
-                System.out.println("\"You should be able to see it now...\"");
-                System.out.println("\"You just need to get lucky enough to trigger it I guess.\"");
+                System.out.println("\"You just need to WAKE UP\"");
                 System.out.println("A) ...");
                 ans = scan.nextLine();
                 secret = true;

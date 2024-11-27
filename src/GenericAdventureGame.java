@@ -132,7 +132,7 @@ public class GenericAdventureGame {
         int enemyHP = 50;
         String action;
         System.out.println("Oh no! It's a wild goblin!");
-        while (enemyHP>0){
+        while (enemyHP>0&&playerHealth>0){
             goblinAttack();
             System.out.println("Choose an action");
             System.out.println("A) Sword");

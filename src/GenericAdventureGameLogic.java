@@ -31,6 +31,8 @@ public class GenericAdventureGameLogic {
         boolean play = game.gameOver();
         while (play) {
             game.event();
+            int health = game.getPlayerHealth();
+            System.out.println("You have "+health+" HP left");
             play = game.gameOver();
         }
         System.out.println();

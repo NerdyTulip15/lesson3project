@@ -34,8 +34,8 @@ public class GenericAdventureGame {
         understandSpellbook = false;
     }
 
-    public int getRounds() {
-        return rounds;
+    public int getPlayerHealth() {
+        return playerHealth;
     }
 
     public void event(){
@@ -51,7 +51,21 @@ public class GenericAdventureGame {
         } else if (num==5){
             battleEvent();
         }
-        System.out.println("You have "+playerHealth+" HP left");
+        roundCount++;
+    }
+
+    public void event(int num){ //STRICTLY FOR TESTING PURPOSES
+        if (num==1){
+            triviaEvent();
+        } else if (num==2){
+            luckEvent();
+        } else if (num==3){
+            mathEvent();
+        } else if (num==4){
+            choiceEvent();
+        } else if (num==5){
+            battleEvent();
+        }
         roundCount++;
     }
 
